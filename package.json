@@ -1,0 +1,25 @@
+{
+  "name": "mynodeproject",
+  "version": "1.0.0",
+  "description": "MyNodeProject",
+  "type": "module",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo\"Error: no test specified\"&& exit 1",
+    "start": "node start.js"
+  },
+  "keyword": [
+    "node.js",
+    "common.js",
+    "dayjs"
+  ],
+  "author": "Victor Michael Joel",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "dayjs": "^1.11.23",
+    "dotenv": "^17.4.2"
+  },
+  "hardware": "infinix phone",
+  "screenSize": "188px"
+}

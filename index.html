@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  body{
+    margin:0;
+    padding :0;
+    line-height:1.5;
+  }
+    .menu-icon{
+      font-size:1.66rem;
+    }
+    aside{
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      align-items:flex-start;
+      width:70%;
+      height:100vh;
+      background:black;
+      z-index:100;
+      color:white;
+      top:0;
+      left:0;
+      transform:translateX(-120%);
+      transition:transform 0.4s ease-in;
+    position :fixed;
+    box-shadow:0.3rem 0.3rem 1rem cyan;
+    }
+
+    aside.show {
+  transform:translateX(0);
+    }
+    
+    .up-panel{
+      display:flex;
+      position:fixed;
+      top:0;
+      right:0;
+      left:0;
+      width:100%;
+      padding:0.4rem;
+      background:black;
+    }
+    .hamburger {
+      padding-left:1rem;
+      margin-right:auto;
+      margin-top:0.5rem;
+      font-size:1.23rem;
+      font-weight:bold;
+      color:white;
+      margin-right:auto;
+      outline:none;
+    }
+    .hamburger:active{transform:scale(0.95);}
+    .dot-icon{
+      padding-right:1.88rem;
+      margin-left:auto;
+      margin-left:1rem;
+      margin-top:0.5rem;
+      font-size:1.23rem;
+      font-weight:bold;
+      color:white;
+      outline:none;
+    }
+      
+    
+    
+    .sidebar-item{
+      background:black;
+  color:white;
+  border:none;
+  margin-left:0.7rem;
+  font-size:1.05rem;
+  cursor:pointer;
+  outline:none;
+    }
+    .sidebar-item:active{
+      box-shadow:0.2rem 0.2rem 1rem cyan;
+      transform:scale(0.98);
+    }
+    .log-out{
+      background:black;
+  color:white;
+  border:none;
+  margin-left:6rem;
+  font-size:1.05rem;
+  margin-top:auto;
+  background:transparent;
+  width:100%;
+  padding:1rem 0.5rem;
+  text-align:left;
+  border-radius:0.5rem;
+  color:#ff5555;
+    }
+  .short-bar{
+    background:black;
+    position: fixed;
+    width:40%;
+    height: 29vh;
+    top:0;
+    right:0;
+    gap:0.4rem;
+    display:flex;
+    flex-direction:column;
+    z-index:100;
+    border-radius:0.10rem;
+    box-shadow:0.2rem 0.2rem 1rem cyan;
+    transform:translateX(120%);
+    transition:transform 0.3s ease-in-out;
+  }
+    .short{
+      color:white;
+      margin-top:1rem;
+      margin-bottom:0.45rem;
+      margin-left:0.42rem;
+    }
+    .show-short{
+     transform:translateX(0);
+    }
+.for-settings.show {
+    transform:translateX(0);
+    }
+    .notification input,
+        .switch input{
+      opacity:0;
+      width:0;
+      height:0;
+    } 
+    .notification,
+    .switch{
+      position:relative;
+      display :flex;
+      height:1.40rem;
+      width:3.75rem;
+    margin-left:auto;
+      flex-shrink:0;
+      display:inline-block;
+    }
+      .slider{
+        border-radius:2.125rem;
+        position: absolute;
+        top: 0;
+        bottom :0;
+        left:0;
+        right :0;
+        transition : background 0.3s ease;
+        background :gray;
+      }
+    .slider::before {
+      content:"";
+      left:0.125rem;
+      bottom:0.125rem;
+      position: absolute;
+      background:#ffffff;
+      height:1.20rem;
+      width :1.30rem;
+      transition :transform 0.3s ease, background-color 0.3s ease;
+      border-radius:3.125rem;
+    }
+    .switch input:checked +.slider{background:green;
+    }
+    
+    
+    .switch input:checked +.slider::before{
+     transform:translatex(2.2rem);
+      background :#fff;
+    }
+    #theme,
+    #one-tap,
+    #notify,
+    #ontapping{
+      color:white;
+flex-grow:1;
+font-size:1.20rem;
+    }
+    
+    .click input,
+        .tap input{
+      opacity:0;
+      width:0;
+      height:0;
+    }
+    .click,
+    .tap{
+margin-left:auto;
+      position:relative;
+      display :flex;
+      height:1.40rem;
+      width:3.75rem;
+      right:0;
+      flex-shrink:0;
+      display :inline-block;
+    }
+    .sliding,
+    .note-slide,
+    .slide{
+      border-radius:2.125rem;
+        position: absolute;
+        top: 0;
+        bottom :0;
+        left:0;
+        right :0;
+        transition : background 0.3s ease;
+        background :gray;
+    }
+    
+    .note-slide::before,
+    .sliding::before,
+    .slide::before {
+      content:"";
+      left:0.125rem;
+      bottom:0.125rem;
+      position:absolute;
+      background:#ffffff;
+      height:1.20rem;
+      width :1.30rem;
+      transition:transform 0.3s ease, background-color 0.3s ease;
+      border-radius:3.125rem;
+    }
+    .tap input:checked +.slide{
+      background:green;
+    }
+    .tap input:checked +.slide::before{
+  transform:translateX(2.2rem);
+      background :#ffffff;}
+    
+  .click input:checked+.sliding{background:green;} 
+  .click input:checked +.sliding::before{
+    transform:translatex(2.2rem);
+    background: #ffffff;
+  }
+    
+    .notification input:checked +.note-slide{
+      background:green;
+    }
+    .notification input:checked +.note-slide::before{
+      background :#fff;
+    transform:translateX(2.2rem);
+    }
+    .back-icon{
+      width:2rem;
+      padding:0;
+      font-size:2rem;
+      margin-left:-0.5rem;
+      margin-top:-1.5rem;
+    }
+    .for-settings{
+      position:fixed;
+      z-index:200;
+      width:100%;
+      height:100vh;
+      background:black;
+      display:flex;
+      flex-direction:column;
+      padding :1.2rem 1.2rem;
+      gap:5%;
+      align-items:flex-start;
+      color: white;
+      box-sizing:border-box;
+     transform: translateX(200%);
+     transition:transform 0.7s ease-in-out;
+    }
+      
+    #fourth-structure,
+    #theme-structure,
+    #third-structure,
+    #second-structure{
+      display:flex;
+      right:0;
+      left:0;
+      width:100%;
+      justify-content:space-between;
+      box-sizing:border-box;
+    }
+    .bell-icon{
+      position:relative;
+    }
+    .number{
+ flex-shrink:0;
+      position:absolute;
+      background:red;
+      color:white;
+      font-size:0.75rem;
+      border-radius:3.125rem;
+    display:inline-block;
+    margin-left:-1.2rem;
+min-width:1.1rem;
+text-align: center;
+line-height: 1.1rem;
+box-sizing:border;
+    margin-top:-0.1rem;
+    }
+    .for-coordinate{
+      position:fixed;
+      width:100%;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      background :black;
+      padding:1rem;
+      gap:5%;
+      z-index:200;
+      box-sizing:border-box;
+      transform: translateX(160%);
+      transition:transform 0.5s ease-in-out;
+    }
+.for-coordinate.open{
+  transform:translateX(0)
+}
+
+.coordinate-input2{
+  margin-right:-3rem;
+}
+
+    .coordinate-input1,
+    .coordinate-input2{
+      width:90%;
+ border:solid 1px darkseagreen;
+    background:black;
+    color:white;
+    padding:0.5rem 0.5rem;
+    outline:none;
+    }
+    
+    .target1,.target2{
+      width:70%;
+ border:solid 1px darkseagreen;
+    background:black;
+    color:white;
+    padding:0.5rem 0.5rem;
+    outline:none;
+    border:none;
+    }
+    .target1{
+      margin-right:auto;
+    }
+    .target2{margin-left:auto;}
+    #coordinate-button{
+      padding:2% 46%;
+      font-size:1.2rem;
+      background:green;
+      color:white;
+      border:none;
+      user-select:none;
+    }
+    #coordinate-button:active{
+      transform:scale(0.95);
+      box-shadow:0.2rem 0.2rem 2rem cyan;
+    }
+    
+    #arrow{
+      color:white;
+    }
+    
+    .for-userProfile{
+      position:fixed;
+      width:100%;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      background:linear-gradient(to left top,indigo,black);
+      padding:1rem;
+      gap:0.4rem;
+      z-index:200;
+      box-sizing:border-box;
+      margin:auto;
+      overflow-y:auto;
+      transform: translateX(160%);
+      transition:transform 0.6s ease-in-out;
+    }
+    .for-userProfile.run{
+      transform:translateX(0);
+    }
+    .for-userProfile label{
+      font-size:1.1rem;
+      color:white;
+    }
+    .for-userProfile input{
+      padding:0.5rem 4.3rem;
+      border:none;
+      outline:none;
+      background:#9a9595;
+      border-radius:5px;
+    }
+    .for-userProfile div{
+ margin-top:-2rem;
+      width:100%;
+      height:30vh;
+      background:linear-gradient(to top left,indigo,black);
+      color:white;
+      align-items:center;
+      border-radius:2rem;
+      position:relative;
+      border-radius:10rem;
+      
+    }
+    .for-userProfile div span{
+      font-size:1.5rem;
+      margin-left:5rem;
+    }
+    
+    
+  </style>
+</head>
+<body>
+    
+    <aside>
+          <h3 style="margin-left:5.5rem;
+          margin-top:1rem;">Toolkit</h3>
+  <button
+  class="sidebar-item" data-action="activate-btn">🗝️&nbsp; set coordinate  </button>
+    <button class="sidebar-item"data-action="deactivate">&#8410006;&nbsp; &nbsp; deactivate</button>
+  <button class="sidebar-item"data-action="settings">&#9881;&nbsp; &nbsp;setting</button>
+    <button class="sidebar-item"data-action="trash">&#128465;&nbsp; &nbsp;trash</button>
+    <button class="sidebar-item"data-action="close">&#10006;&nbsp; &nbsp;close</button>
+    <div class="log-out"role="button" tabindex="0">log out</div></aside>
+  
+  
+  <div class="up-panel">
+<div class="hamburger" role="button" tabindex="0">&#9776;</div>
+<div class="dot-icon" role="button" tabindex="0">&#8942;</div></div>
+
+
+<div class="short-bar">
+  <div class="
+  short sidebar-item" role="button" tabindex="0"data-action="profile">&#128100; User profile</div>
+    <div class="short sidebar-item"role="button" tabindex="0" data-action="notification"><span class="bell-icon">&#128276;
+    <span class="number">0</span>
+    </span> Notification</div>
+  <div class="short sidebar-item"role="button" tabindex="0"data-action="About">🌐 About Us</div>
+      <div class="short sidebar-item"role="button" tabindex="0" data-action="privacy">privacy policy</div></div>
+
+
+<div class="for-settings">
+    <h3 style="color:white;
+    margin-top:-0.5rem;"><span class="back-icon">&#8592;</span>&nbsp; &nbsp; &nbsp;&nbsp;settings</h3>
+    <br>
+    <br>
+    <div id="theme-structure"><span id="theme">white</span>
+      <label class="switch">
+    <input class="check" type="radio"name="coding">
+    <span class="slider"></span>
+  </label></div>
+<div id="second-structure">
+  <span id="ontapping">black</span> <label class="tap">
+    <input class="check2" type="radio" name="coding">
+    <span class="slide"></span>
+  </label>
+  </div>
+<div id="third-structure">
+  <span id="one-tap">one-tap</span> <label class="click">
+    <input class="check3" type="checkbox">
+    <span class="sliding"></span>
+  </label>
+  </div>
+  <div id="fourth-structure">
+  <span id="notify">&#128276; Notification</span> <label class="notification">
+    <input class="check4" type="checkbox">
+    <span class="note-slide"></span>
+  </label>
+  </div>
+</div>
+
+
+
+<div class="for-coordinate">
+      <h3 style="color:white;
+    margin-top:-0.5rem;"><span class="back-icon">&#8592;</span>&nbsp; &nbsp; &nbsp;&nbsp;set coordinate</h3>
+  <div style="display:flex;
+  flex-direction:row;
+  gap:2rem;
+  margin-top:3rem;">
+    <label class="target1"> <span style="color:white;">risk-percent</span>
+    <br>
+    <input class="coordinate-input1" type="number" placeholder="1%"></label>
+    
+    <label class="target2"><span style="color:white;margin-right:-2rem;">Trail SL</span>
+    <br>
+      <input class="coordinate-input2"type="number"placeholder="10 pips"></label>
+  </div>
+  
+  <div style="display:flex;
+  flex-direction:row;
+  width:100%;">
+      <label class="index0"><span style="color:white;margin-left:0.4rem;">min</span> 
+      <br>
+    <select style="padding:0.5rem;margin-right:auto;
+    margin-left:0.4rem;" name="rrr" id="rrr">
+      <option value="1">1RRR</option>
+      <option value="1.5">1.5RRR</option>
+      <option value="2">2RRR</option>
+      <option value="2.5">2.5RRR</option>
+      <option value="3">3RRR</option>
+    </select>
+  </label>
+  
+  <label class="index1"style="margin-left:auto;"><span style="color: white;">max</span>
+  <br>
+  <select style="padding:0.5rem;margin-right:0.3rem;"name="rrr" id="rrr2">
+    <option value="4">4 RRR</option>
+    <option value="4.5">4.5 RRR</option>
+    <option value="5">5 RRR</option>
+    <option value="infinite">infinite</option>
+  </select></label>
+  </div>
+
+  <button id="coordinate-button">
+    set
+  </button>
+</div>
+
+
+<div class="for-userProfile">
+    <span class="back-icon" id="arrow">&#8592;</span>
+    <br>
+<div>
+  <br>
+  <br>
+  <br>
+  <span>&#128100; User Profile</span></div>
+  <label class="profile-props">First name:</label>
+  <input class="user-details"type="text" data-set="name">
+      
+    <label class="profile-props">Last name:</label>
+  <input class="user-details"type="text" data-set="lastName">
+
+    <label class="profile-props">Email:</label>
+  <input class="user-details"type="text" data-set="email">
+
+    <label class="profile-props">Phone No:</label>
+  <input class="user-details"type="text" data-set="number">
+
+    <label class="profile-props">Password:</label>
+  <input class="user-details"type="password" data-set="password">
+
+    <label class="profile-props">Address:</label>
+  <input class="user-details"type="text" data-set="address">
+
+</div>
+
+
+<script src="www.js" defer></script>
+</body>
+</html>
