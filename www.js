@@ -346,14 +346,25 @@ function percent() {
 percent();
 
 
-console.log("hello world");
-
-// Start a timer for 10 seconds (10000ms)
-const timerOutput = setTimeout(() => {
-  console.log("This will never print because we will stop it!");
-}, 10000);
-
-// PRINT THE VARIABLE TO THE SCREEN
-console.log("WHAT IS INSIDE THE VARIABLE?:", timerOutput);
 
 
+
+function factorial(n){
+  // base case: if n is 0 or 1, return 1
+  if(n === 0 || n === 1) return 1;
+  
+  // recursive case: n times factorial of n-1
+  return n * factorial(n - 1);
+}
+
+console.log(factorial(4)) // 24
+
+const fruits = {};
+
+const array = ["orange","apple","mango"];
+array.forEach((value,number)=>{
+  fruits[`number${number+1}`] = value;
+ console.log(number);
+})
+
+console.log(fruits);
