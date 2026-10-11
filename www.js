@@ -1,370 +1,379 @@
 
-/*const settingDiv = document.querySelector('.for-settings')
-const forCoordinate = document.querySelector('.for-coordinate')
-const quer_y = document.querySelector('.for-userProfile')
-const quer_yProps = document.querySelectorAll('.profile-props')
-const quer_yInput = document.querySelectorAll('.user-details')
-const arrowIcon = document.querySelector('#arrow');
 
-const SIDE_BAR = document.querySelector('aside')
+const forgetPassword = document.getElementById("forget-password");
+forgetPassword.addEventListener("click",async (e)=>{
+ e.preventDefault();
+ document.getElementById("pass").value="";
+ const confirmed = confirm("are you willing to reset password");
+ if(!confirmed) return;
+ const promptedEmail = prompt("input your email");
+ if(!promptedEmail)return;
+ const promptedPassword = prompt("input new password");
+ if(!promptedPassword) return;
+ try {
+  const res = await fetch("/reset",{
+   method: "POST",
+   headers: {
+    "Content-Type":"application/json"
+   },
+   body: JSON.stringify({
+    email: promptedEmail,
+    password: promptedPassword
+   })
+  });
+  const response = await res.json();
+  alert(response.message);
+  document.getElementById("submit").value = "login";
+ } catch (error) {
+  alert(error.message);
+ }
+})
 
-SIDE_BAR.addEventListener('click', (e) => {
-  e.stopPropagation();
+
+
+const element = document.querySelector(".aside1");
+element.addEventListener("click",(e)=>{
+ e.stopPropagation();
+})
+
+window.addEventListener("click",()=>{
+ element.classList.remove("open");
 });
 
-const navigation_icon = document.querySelector('.hamburger')
-navigation_icon.addEventListener('click',(e)=>{
-  e.stopPropagation()
-  SIDE_BAR.classList.add('show-short');
-  if (shortBarElement) {
-    shortBarElement.classList.remove('show-short');
-  }
+document.getElementById("hamburger").addEventListener("click",(e)=>{
+ e.stopPropagation();
+ element.classList.toggle("open");
 })
 
 
+const submitBtnElement = document.getElementById("submit");
+const phoneNumberElement = document.getElementById("number");
+const emailInputElement = document.getElementById("text");
+const passwordElement = document.getElementById("pass");
+const form = document.querySelector("form");
+const textValidation = document.querySelectorAll(".text-message");
 
-window.addEventListener('click',()=>{
-  SIDE_BAR.classList.remove('show-short');
-  shortBarElement.classList.remove('show-short');
-})
 
 
-const buttons = document.querySelectorAll('.sidebar-item');
-buttons.forEach((item)=>{
-  item.addEventListener('click',()=>{
-    const action = item.dataset.action;
-    if(action==='close'){
-      SIDE_BAR.classList.remove('show-short');
-    }
-    if (action==='settings') {
-      settingDiv.classList.add('show')
-    }
-    if (action==='activate-btn') {
-      forCoordinate.classList.add('open');
-    }
-    if (action==='profile') {
-      quer_y.classList.add('run');
-    }
-      
-    
-    
-  })
-})
 
-const shortBarElement = document.querySelector('.short-bar');
+phoneNumberElement.addEventListener("input",()=>{textValidation[0].classList.remove("e");
+                                                textValidation[0].textContent="";});
+emailInputElement.addEventListener("input",()=>{textValidation[1].classList.remove("e");
+                                               textValidation[1].textContent="";});
+passwordElement.addEventListener("input",()=>{textValidation[2].classList.remove("e");
+                                             textValidation[2].textContent="";});
 
-shortBarElement.addEventListener('click',(e)=>{
-  e.stopPropagation();
-})
 
-const dotIcon = document.querySelector('.dot-icon');
-dotIcon.addEventListener('click',(e)=>{
-  e.stopPropagation();
-  shortBarElement.classList.add('show-short');
-  if (SIDE_BAR) {
-    SIDE_BAR.classList.remove('show-short');
-  }
-})
 
-const backIcon = document.querySelectorAll('.back-icon');
-if (backIcon instanceof NodeList) {
-  backIcon.forEach((one)=>{
-    one.addEventListener('click',(e)=>{
-      e.stopPropagation();
-if(settingDiv){settingDiv.classList.remove('show');}
-if(forCoordinate){forCoordinate.classList.remove('open');}
-if (quer_y) {
-  quer_y.classList.remove('run');
+form.addEventListener("submit",async(e)=>{
+ e.preventDefault();
+ let isValid = true;
+ const phoneNumberRegEx = /^(?:\+234|0)\d{10}$/;
+ const phoneNumberInput = phoneNumberElement.value.trim();
+ const emailInput = emailInputElement.value.trim();
+ const passwordinput = passwordElement.value.trim();
+
+ if(phoneNumberInput===""){
+  textValidation[0].classList.add("e");
+  textValidation[0].textContent = "field can't be empty";
+  isValid=false;
+ }
+ 
+else if(!phoneNumberRegEx.test(phoneNumberInput)){
+  textValidation[0].classList.add("e");
+  textValidation[0].textContent = "input a valid phone number";
+  isValid=false;
+ }
+
+ const emailRegEx = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+ if(emailInput===""){
+  textValidation[1].classList.add("e");
+  textValidation[1].textContent="email is required";
+isValid=false;
+ }
+else if(!emailRegEx.test(emailInput)){
+  textValidation[1].classList.add("e");
+  textValidation[1].textContent = "input a valid email";
+isValid=false;
 }
+
+ const passwordRegEx = /^[a-zA-Z]{3,}\d{3,}$/;
+if(passwordinput===""){
+ textValidation[2].classList.add("e");
+ textValidation[2].textContent="please input a password";
+ isValid=false;
+}
+ else if(!passwordRegEx.test(passwordinput)){
+  textValidation[2].classList.add("e");
+  textValidation[2].textContent="password must be 6 characters long";
+isValid=false;
+ };
+
+ if(!isValid)return;
+if(submitBtnElement.value==="sign in"){
+ submitBtnElement.value="process..";
+ submitBtnElement.disabled = true;
+ try {
+  const response = await fetch("/signUp",{
+   method:"POST",
+   headers:{
+    "Content-Type":"application/json",
+    "fezbot-app":"fezbot-API"
+   },
+   body:JSON.stringify({
+    phoneNumber:phoneNumberInput,
+    email:emailInput,
+    password:passwordinput,
+    date: new Date()
+   })
+  });
+  const data = await response.json();
+  alert(data.message||JSON.stringify(data.message));
+  data.token?localStorage.setItem("token",data.token):"";
+ frontView();
+ } catch (error) {
+  console.log(error);
+ }
+finally{
+  submitBtnElement.value="sign in";
+ submitBtnElement.disabled = false;
+ }
+}
+ else if(submitBtnElement.value === "login"){
+  submitBtnElement.value = "process..";
+  submitBtnElement.disabled = true;
+  try {
+   const response = await fetch("/login",{
+    method: "POST",
+    headers: {
+     "Content-Type":"application/json",
+    },
+    body: JSON.stringify({
+     phoneNumber:phoneNumberInput,
+    email:emailInput,
+    password:passwordinput,
+    date: new Date()
     })
-  })
+   });
+   const res = await response.json();
+   alert(res.message||JSON.stringify(res.message));
+   if(res.token)localStorage.setItem("token",res.token);
+   frontView();
+  } catch (error) {
+   alert(error.message);
+  }
+  finally{
+  submitBtnElement.value="login";
+ submitBtnElement.disabled = false;
+ }
+  }
+ 
+});
+ 
+function frontView(){
+const frontend = document.getElementById("frontend");
+ if(frontend){
+  frontend.style.display="none";
+ }
+document.getElementById("internals").style.display="block";
+document.querySelector("body").style.background = "hwb(0 15% 85%)";
+
+ const targetEmail = document.getElementById("internal-email");
+targetEmail.value = emailInputElement.value;
+const targetNumber = document.getElementById("internal-phoneNO");
+targetNumber.value = phoneNumberElement.value;
+ const targetPassword = document.getElementById("internal-pass");
+ targetPassword.value = passwordElement.value;
 }
 
-const elements =(name)=>document.querySelector(`#${name},.${name}`);
-const myElement = ['theme','switch','ontapping','tap','check','check2','check4','notify'].map(elements);
-const [theme,swiTch,ontapping, tap,check,check2,check4,notify] = myElement; 
-myElement.forEach((element)=>{
-  if(!element) return;
-  element.addEventListener('click',(e)=>{
-    e.stopPropagation();
-    if (element===theme||element===swiTch) {
-      document.body.style.setProperty('background','white');
-      check.checked =true;
-    }
-    else if (element===ontapping||element===tap) {
-      document.body.style.setProperty('background','black');
-      check2.checked=true;
-      quer_y.style.setProperty('background','black');
-  quer_yProps.forEach(el=>{el.style.color='white'});
-  quer_yInput.forEach(item=>{
-    item.style.background = 'black';
-    item.style.color = 'white';
-  });
-  arrowIcon.style.color = 'white';
-    }
-   if ((element===notify&& element===check4)&& check4) {
-      check4.checked=true;
-    }
-  })
+
+
+
+ const search_bar = document.querySelector(".search");
+const rhymeList = document.getElementById("API-rhymes");
+const rhymeMeaning = document.getElementById("Rhyme-meaning");
+const textGraph = document.querySelector(".text-paragraph");
+const shuffleBtn = document.querySelector(".shuffle");
+
+const STATE = {
+ words:[],
+ page:0,
+ size:10
+}
+
+
+search_bar.addEventListener("keydown", async (e)=>{
+ if(e.key==="Enter"){
+  e.preventDefault();
+  await search_value();
+ }
 })
+
+search_bar.addEventListener("search",async (e)=>{
+  e.preventDefault();
+ await search_value();
+})
+
+async function search_value(){
+  try {
+   
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Please login first");
+    return;
+  }
+  // ... rest of the function
+   
+  const data = await fetch("/rhymeList",{
+   method: "POST",
+   headers: {
+    "Content-Type":"application/json",
+    "authorization":`Bearer ${localStorage.getItem("token")}`
+   },
+   body: JSON.stringify({
+    value: search_bar.value.trim()
+   })
+  });
+   /*if (!data.ok) {
+    const response = await data.json();
+    if (response.message.includes("jwt expired")) {
+     alert("session timeout");
+     localStorage.removeItem("token");
+     document.getElementById("internals").style.display = "none";
+     document.getElementById("frontend").style.display = "block";
+     document.getElementById("submit").value = "login";
+    }
+    return;
+   }*/
+   if (!data.ok) {
+  const response = await data.json().catch(() => ({}));
+  alert(response.message || `Request failed (${data.status})`);
+
+  if (
+    response.message?.includes("jwt expired") ||
+    response.message?.includes("authorization") ||
+    response.message?.includes("unknown identifier")
+  ) {
+    localStorage.removeItem("token");
+    document.getElementById("internals").style.display = "none";
+    document.getElementById("frontend").style.display = "block";
+    document.getElementById("submit").value = "login";
+  }
+  return;
+   }
+  const res = await data.json();
+  STATE.words = res.map(r=>r.word);
+   runCal();
+ } catch (error) {
+  alert(error.message);
+  }
+ }
+ 
+ 
+
+ 
+
+
+function runCal(){
+ rhymeList.innerHTML = "";
+ const page = STATE.page;
+ const size = STATE.size;
+ const start = page * size;
+ const end = start + size;
+ const pageWord = STATE.words.slice(start,end);
+ pageWord.forEach((word, index)=>{
+  const paragraphElement = document.createElement("p");
+  paragraphElement.className = "p-element";
+  paragraphElement.style.color = "white";
+  paragraphElement.textContent = word;
   
-
-document.addEventListener('DOMContentLoaded',()=>{
-  const panel = document.querySelector('.dot-icon');
-const notifyCenter=document.querySelector('.number');
-
-let count = Number(notifyCenter.textContent)||0;
-function fname() {
-  if (count>=11) {
-    notifyCenter.textContent='11+'
-  }
-  else {
-    notifyCenter.textContent=count;
-  }
-}
-  panel.addEventListener('click',()=>{
-    count++;
-    fname();
-  })
-});
-
-function percent(){
-  const RRR = (R)=>document.querySelector(`#${R},.${R}`);
-const riskPerTrade = ['rrr','rrr2'].map(RRR);
-const [risk1,risk2]=riskPerTrade;
-risk1.addEventListener('change',()=>{
-  if (risk1.value!=='') {
-    risk2.value='';
-  }
-})
-risk2.addEventListener('change',()=>{
-  if (risk2.value!=='') {
-    risk1.value='';
-  }
-})
-}
-percent();
-
-*/
-
-// ====================== SELECT ELEMENTS ======================
-const SIDE_BAR = document.querySelector('aside');
-const shortBarElement = document.querySelector('.short-bar');
-const settingDiv = document.querySelector('.for-settings');
-const forCoordinate = document.querySelector('.for-coordinate');
-const quer_y = document.querySelector('.for-userProfile');
-
-const navigation_icon = document.querySelector('.hamburger');
-const dotIcon = document.querySelector('.dot-icon');
-const backIcon = document.querySelectorAll('.back-icon');
-const buttons = document.querySelectorAll('.sidebar-item');
-
-const quer_yProps = document.querySelectorAll('.profile-props');
-const quer_yInput = document.querySelectorAll('.user-details');
-const arrowIcon = document.querySelector('#arrow');
-
-const check = document.querySelector('.check');
-const check2 = document.querySelector('.check2');
-const check4 = document.querySelector('.check4');
-
-const theme = document.querySelector('#theme');
-const ontapping = document.querySelector('#ontapping');
-const notify = document.querySelector('#notify');
-const swiTch = document.querySelector('.switch');
-const tap = document.querySelector('.tap');
-const notification = document.querySelector('.notification');
-
-quer_yInput.forEach(element=>{
-  element.addEventListener('focus',function(){
-   setTimeout(()=>{
-     element.scrollIntoView({
-      behavior:"smooth",
-      block:"center"
-    })
-   },1000);
-  })
-  })
-
-quer_yInput.forEach(input=>{
-  const inputValue = input.value.trim();
-  const getInput = input.getAttribute("data-set");
+  paragraphElement.addEventListener("click", async ()=>{
+   try {
+    const result = await fetch("/wordMeaning",{
+     method: "POST",
+     headers: {
+      "Content-Type":"application/json",
+      "authorization":`Bearer ${localStorage.getItem("token")}`
+     },
+     body: JSON.stringify({
+      value:word
+     })
+    });
+    if (!result.ok) {
+     const response = await result.json();
+     if(response.message.includes("jwt expired")){
+      localStorage.removeItem("token");
+      document.getElementById("internals").style.display = "none";
+     document.getElementById("frontend").style.display = "block";
+     document.getElementById("submit").value = "login";
+     }
+     return;
+    }
+    const response = await result.json();
+    textGraph.style.color = "white";
+    textGraph.textContent = response;
+   } catch (error) {
+    alert(error.message);
+   }
+  });
   
-  if(getInput==="name")input.placeholder = inputValue;
-  if(getInput==="lastName")input.placeholder = inputValue;
-  if(getInput==="email")input.placeholder=inputValue;
-  if(getInput==="password")input.placeholder = inputValue;
-  if(getInput==="number")input.placeholder = inputValue;
-  if(getInput==="address")input.placeholder = inputValue;
+  setTimeout(()=>{
+   rhymeList.append(paragraphElement);
+  },100 * index);
+ });
+ if(STATE.words.length > 0){
+  shuffleBtn.style.display = "block";
+ }
+}
+
+shuffleBtn.addEventListener("click",()=>{
+ STATE.page++;
+ if(STATE.page * STATE.size >= STATE.words.length){
+  STATE.page = 0;
+ }
+ runCal();
 })
 
 
-// ====================== STOP CLICK FROM CLOSING MENUS ======================
-SIDE_BAR.addEventListener('click', function(e) {
-  e.stopPropagation();
-});
 
-shortBarElement.addEventListener('click', function(e) {
-  e.stopPropagation();
-});
+const logOut = document.getElementById("log-out");
 
+const internalPassword = document.getElementById("internal-pass");
+const span = document.getElementById("hide/show");
 
-// ====================== OPEN LEFT SIDEBAR (Hamburger) ======================
-navigation_icon.addEventListener('click', function(e) {
-  e.stopPropagation();
-  SIDE_BAR.classList.add('show');
-  shortBarElement.classList.remove('show-short');
-});
-
-
-// ====================== OPEN SHORT BAR (Three dots) ======================
-dotIcon.addEventListener('click', function(e) {
-  e.stopPropagation();
-  shortBarElement.classList.add('show-short');
-  SIDE_BAR.classList.remove('show');
-});
-
-
-// ====================== CLOSE BOTH MENUS WHEN CLICKING OUTSIDE ======================
-window.addEventListener('click', function() {
-  SIDE_BAR.classList.remove('show');
-  shortBarElement.classList.remove('show-short');
-});
-
-
-// ====================== SIDEBAR BUTTONS ======================
-buttons.forEach(function(item) {
-  item.addEventListener('click', function() {
-    const action = item.dataset.action;
-
-    if (action === 'close') {
-      SIDE_BAR.classList.remove('show');
-    }
-
-    if (action === 'settings') {
-      settingDiv.classList.add('show');
-    }
-
-    if (action ==='activate-btn') {
-      forCoordinate.classList.add('open');
-    }
-
-    if (action === 'profile') {
-      quer_y.classList.add('run');
-    }
-  });
-});
-
-
-// ====================== BACK BUTTONS (Close panels) ======================
-backIcon.forEach(function(one) {
-  one.addEventListener('click', function(e) {
-    e.stopPropagation();
-    settingDiv.classList.remove('show');
-    forCoordinate.classList.remove('open');
-    quer_y.classList.remove('run');
-  });
-});
-
-
-// ====================== THEME SWITCHING ======================
-if (theme) {
-  theme.addEventListener('click', function() {
-    document.body.style.background = 'white';
-    if (check) check.checked = true;
-  });
-}
-
-if (swiTch) {
-  swiTch.addEventListener('click', function() {
-    document.body.style.background = 'white';
-    if (check) check.checked = true;
-  });
-}
-
-if (ontapping) {
-  ontapping.addEventListener('click', function() {
-    document.body.style.background = 'black';
-    if (check2) check2.checked = true;
-
-    if (arrowIcon) arrowIcon.style.color = 'white';
-  });
-}
-
-if (tap) {
-  tap.addEventListener('click', function() {
-    document.body.style.background = 'black';
-    if (check2) check2.checked = true;
-
-    
-    if (arrowIcon) arrowIcon.style.color = 'white';
-  });
-}
-
-
-// ====================== NOTIFICATION COUNTER ======================
-document.addEventListener('DOMContentLoaded', function() {
-  const panel = document.querySelector('.dot-icon');
-  const notifyCenter = document.querySelector('.number');
-
-  let count = Number(notifyCenter.textContent) || 0;
-
-  function updateCount() {
-    if (count >= 11) {
-      notifyCenter.textContent = '11+';
-    } else {
-      notifyCenter.textContent = count;
-    }
+internalPassword.value = passwordElement.value;
+ span.onclick = () => {
+  if(internalPassword.type==="password"){
+   internalPassword.type = "text";
+   span.textContent = "hide";
   }
+  else{
+   internalPassword.type = "password";
+   span.textContent = "show";
+  }
+ }
 
-  panel.addEventListener('click', function() {
-    count++;
-    updateCount();
-  });
-});
-
-
-// ====================== RRR SELECTS ======================
-function percent() {
-  const riskToRewardRatio = document.querySelector('#rrr');
-  const riskToRewardRatio2 = document.querySelector('#rrr2');
-
-  if (!riskToRewardRatio || !riskToRewardRatio2) return;
-
-  riskToRewardRatio.addEventListener('change', function() {
-    if (riskToRewardRatio.value !== '') {
-      riskToRewardRatio2.value = '';
-    }
-  });
-
-  riskToRewardRatio2.addEventListener('change', function() {
-    if (riskToRewardRatio2.value !== '') {
-      riskToRewardRatio.value = '';
-    }
-  });
-}
-
-percent();
-
-
-
-
-
-function factorial(n){
-  // base case: if n is 0 or 1, return 1
-  if(n === 0 || n === 1) return 1;
-  
-  // recursive case: n times factorial of n-1
-  return n * factorial(n - 1);
-}
-
-console.log(factorial(4)) // 24
-
-const fruits = {};
-
-const array = ["orange","apple","mango"];
-array.forEach((value,number)=>{
-  fruits[`number${number+1}`] = value;
- console.log(number);
+logOut.addEventListener("click",()=>{
+ localStorage.removeItem("token");
+ document.getElementById("internals").style.display = "none";
+ document.getElementById("frontend").style.setProperty("display","block");
+ document.body.style.background = "cyan";
+ const element = document.getElementById("submit");
+ element.value = "login";
+ element.disabled = false;
 })
 
-console.log(fruits);
+// Check if user is already logged in when the page loads
+window.addEventListener("DOMContentLoaded", () => {
+  /*const token = localStorage.getItem("token");
+
+  if (token) {
+    // User has a token → go straight to the internal page
+    document.getElementById("frontend").style.display = "none";
+    document.getElementById("internals").style.display = "block";
+    document.body.style.background = "hwb(0 15% 85%)";
+  }*/
+});
+
+   
+  

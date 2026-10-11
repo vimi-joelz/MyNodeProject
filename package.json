@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "MyNodeProject",
   "type": "module",
-  "main": "script.js",
+  "main": "script",
   "scripts": {
     "test": "echo\"Error: no test specified\"&& exit 1",
-    "start": "node start.js"
+    "start": "node --env-file=.env util.ts"
   },
   "keyword": [
     "node.js",
@@ -17,9 +17,18 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "chalk": "^6.0.0",
     "dayjs": "^1.11.23",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.0",
+    "zod": "^4.6.5"
   },
   "hardware": "infinix phone",
-  "screenSize": "188px"
+  "screenSize": "188px",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.15.0",
+    "typescript": "^5.3.3"
+  }
 }
