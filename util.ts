@@ -17,9 +17,9 @@ const pool = new pg.Pool({
 const SECRECY: string = process.env.SECRETKEY;
 const PORT: string|number = process.env.PORT || 8080;
 
-enum HttpStat{
- ok = 200,serverErr = 500, unknown_route = 404,AuthFailed = 401
-}
+const HttpStat = {
+ ok: 200,serverErr: 500, unknown_route: 404,AuthFailed: 401
+} as const;
 
 interface StaticFileMap{
  [key: string]: string;
