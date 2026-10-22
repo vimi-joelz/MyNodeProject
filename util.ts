@@ -270,11 +270,33 @@ const server = createServer((req,res)=>{
     checkAuth(req,res);
     return;
    }
-   if(req.method==="GET"){
-    validateFilePath(req,res);
+   if(req.method==="GET" && req.url==='/create-table'){
+    (async () => {
+     try {
+      await pool.query(`
+       CREATE TABLE IF NOT EXISTS user_data (
+        id SERIAL PRIMARY KEY,
+        phone_number TEXT,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        acc_date TIMESTAMP DEFAULT NOW()
+       )
+      `)
+     res.writeHead(HttpStat.ok,{'Content-Type':'application/json'})
+      res.end();
+     }
+     catch(e){
+      res.writeHead(HttpStat.AuthFailed,{'Content-Type':'appplication/json'})
+      res.end(e.message)
+     }
+    })();
     return;
    }
 
+   if(req.method==='GET'){
+    validateFilePath(req,res);
+    return;
+   }
    res.writeHead(HttpStat.serverErr,{"Content-Type":"application/json"})
    res.end(JSON.stringify({message:"error observe from localhost"}));
   })
