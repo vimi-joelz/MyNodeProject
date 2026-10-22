@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RHYMEVISTA</title>
  <style>
+  :root {
+   --bgcyan: cyan;
+   --bgtransparent: transparent;
+   --gray: light-gray;
+   --ppl: mediumpurple;
+   --white: white;
+  --click: rgba(222,222,222,0.26);
+  }
   body{
-   background:white;
    margin:0;
-  background:cyan;
+  background: var(--bgcyan);
   }
   .text{
    padding:0.6rem 4.5rem;
@@ -39,7 +46,7 @@
    color:red;
   }
   #frontend{
-   display: block;
+   display: none;
    align-items:center;
   }
  .aside1{
@@ -150,9 +157,37 @@
   .shuffle:active{
    transform:scale(0.90);
   }
-  
-  
 
+  .cl {
+   font-weight:500;
+   background: var(--ppl);
+   padding: 0 0.3rem;
+   border-radius: 2rem;
+  }
+  .side-bar-icons {
+   font-size:1.2rem;
+   color: var(--white);
+   background: var(--bgtransparent);
+   border:none;
+   border-color:white;
+  }
+
+  .icon-text {
+   color: var(--white);
+   background: var(--gray);
+  }
+
+
+  
+  .side-bar-item {
+   padding: 0.3rem 0;
+   margin-left: 1rem;
+  }
+
+  .side-bar-item:active{
+   background: var(--click);
+   backdrop-filter: blur(0.7rem);
+  }
   
  </style>
 </head>
@@ -192,20 +227,19 @@
  <h3>your best rhyme</h3>
  </div>
 
- <div id="internals" style="display:none;">
+ <div id="internals" style="display:block;">
 <aside class="aside1">
- <h3 style="color:white; margin-top:0rem; margin-left:3rem; padding: 0.5rem;">USER PROFILE</h3>
- <br><br><br>
- <div id="button-div"> 👤 </div>
- <br><br>
- <input id="internal-phoneNO"style="padding:0.5rem 0rem; width:94%; margin-left:0.3rem"type="tel" placeholder="phoneNo">
+ <h3 style="color:white; margin-top:0rem; margin-left:3rem; padding: 0.5rem;"><span class="cl">CL</span> &nbsp; Library</h3>
+ <div class="side-bar-item" role = "button" tabindex = "0" data-action="dash-board"><span class="side-bar-icons">&#8962; </span> &nbsp; &nbsp;<span class="icon-text">Dashboard</span></div>
  <br>
- <input id="internal-email"style="padding:0.5rem 0rem; width:94%; margin-left:0.3rem;  outline:none; border:none;" type="text" placeholder="email">
+ <div class="side-bar-item" role = "button" tabindex = "0" data-action="pro-file"><span class="side-bar-icons">&#128100;&#65038; </span> &nbsp; &nbsp;<span class="icon-text">Profile</span></div>
  <br>
- <div>
-  <input id="internal-pass"style="padding-right: 20%; margin-left: 0.3rem;padding-top:0.5rem; padding-bottom:0.5rem;" type="password" placeholder="password">
- <span id="hide/show" style="color:black; margin-left:-3rem;">show</span>
- </div>
+ <div class="side-bar-item" role = "button" tabindex = "0" data-action="sett-ings"><span class="side-bar-icons">&#9881; </span> &nbsp; &nbsp; <span class="icon-text">Settings</span></div>
+<br>
+ <div class="side-bar-item" role = "button" tabindex = "0" data-action="likes"><span class="side-bar-icons">&#9829; </span> &nbsp; &nbsp;<span class="icon-text">Likes</span></div>
+ <br>
+ <div class="side-bar-item" role = "button" tabindex = "0" data-action="notification"><span class="side-bar-icons">&#128276; </span> &nbsp; &nbsp;<span class="icon-text">Notification</span></div>
+<br>
  
  <br><br>
  <div id="log-out" role="button" tabindex="0">log out</div>

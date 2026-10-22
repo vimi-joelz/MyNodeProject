@@ -97,7 +97,7 @@ else if(!emailRegEx.test(emailInput)){
 isValid=false;
 }
 
- const passwordRegEx = /^(?:[a-zA-Z]{3,}\d{3,}|\d{2,}[a-zA-Z]{3,})$/;
+ const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/;
 if(passwordinput===""){
  textValidation[2].classList.add("e");
  textValidation[2].textContent="please input a password";
@@ -105,9 +105,9 @@ if(passwordinput===""){
 }
  else if(!passwordRegEx.test(passwordinput)){
   textValidation[2].classList.add("e");
-  textValidation[2].textContent="password must be 6 characters long";
+  textValidation[2].textContent="please input a strong password";
 isValid=false;
- };
+ }
 
  if(!isValid)return;
 if(submitBtnElement.value==="sign in"){
