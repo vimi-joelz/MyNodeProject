@@ -97,7 +97,7 @@ else if(!emailRegEx.test(emailInput)){
 isValid=false;
 }
 
- const passwordRegEx = /^[a-zA-Z]{3,}\d{3,}$/;
+ const passwordRegEx = /^(?:[a-zA-Z]{3,}\d{3,}|\d{2,}[a-zA-Z]{3,})$/;
 if(passwordinput===""){
  textValidation[2].classList.add("e");
  textValidation[2].textContent="please input a password";
@@ -177,13 +177,6 @@ const frontend = document.getElementById("frontend");
  }
 document.getElementById("internals").style.display="block";
 document.querySelector("body").style.background = "hwb(0 15% 85%)";
-
- const targetEmail = document.getElementById("internal-email");
-targetEmail.value = emailInputElement.value;
-const targetNumber = document.getElementById("internal-phoneNO");
-targetNumber.value = phoneNumberElement.value;
- const targetPassword = document.getElementById("internal-pass");
- targetPassword.value = passwordElement.value;
 }
 
 
