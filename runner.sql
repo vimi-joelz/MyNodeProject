@@ -1,12 +1,20 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+CREATE TABLE user_table(
+ id UUID PRIMARY KEY DEFAULT uuidv7(),
+ name TEXT,
+ carrier VARCHAR(10),
+ balance NUMERIC  NOT NULL DEFAULT 0.00,
+ date_time TIMESTAMPTZ(0) DEFAULT NOW()
+);
 
+CREATE TABLE transaction_history (
+ id UUID PRIMARY KEY DEFAULT uuidv7(),
+ user_id UUID REFERENCES user_table(id),
+ transaction_status TEXT CHECK(transaction_status IN('DEPOSIT','RECHARGE','WITHDRAW'))NOT NULL DEFAULT 'DEPOSIT',
+ transactions NUMERIC NOT NULL DEFAULT 0.00,
+ time_transact TIMESTAMPTZ(0) DEFAULT NOW()
+);
 
-/*CREATE TABLE user_data(
- id SERIAL PRIMARY KEY,
- phone_number VARCHAR(20),
- email TEXT UNIQUE NOT NULL CHECK(email=Lower(email)),
- password TEXT NOT NULL,
- acc_date TIMESTAMPTZ(0) NOT NULL DEFAULT NOW()
-)
-*/
-truncate table user_data restart identity
+/*drop table transaction_history;
+drop table user_table CASCADE;*/

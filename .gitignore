@@ -9,5 +9,9 @@ script.json
 server.js
 index.ts
 meta.ts
-index.html
-www.js
+util.ts
+type.ts
+adobe.ts
+start.ts
+run.ts
+
